@@ -117,16 +117,13 @@ for tide in daily_low_tides:
     event_id = f"lowtide-{tide['time'].strftime('%Y%m%d')}".lower()
 
     event = {
-        "id": event_id,  # deterministic, valid ID
-        "summary": title,
-        "description": (
-            f"Lowest predicted tide of the day\n"
-            f"Height: {tide['value']} m\n"
-            f"Time (UTC): {tide['time'].strftime('%H:%M')}"
-        ),
-        "start": {"dateTime": start_time, "timeZone": TIMEZONE},
-        "end": {"dateTime": end_time, "timeZone": TIMEZONE},
+        "id": event_id,  # safe deterministic ID
+        "summary": f"🌊 Low tide {tide['value']} m",
+        "description": f"Lowest predicted tide of the day\nHeight: {tide['value']} m\nTime (UTC): {tide['time'].strftime('%H:%M')}",
+        "start": {"dateTime": tide['time'].isoformat(), "timeZone": "UTC"},
+        "end": {"dateTime": (tide['time'] + timedelta(hours=1)).isoformat(), "timeZone": "UTC"},
     }
+
 
     if DRY_RUN:
         print(f"[DRY RUN] Would create event: {title}")
