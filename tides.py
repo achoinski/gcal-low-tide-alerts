@@ -105,7 +105,7 @@ for tide in daily_low_tides:
     start_time = tide["time"].isoformat()
     end_time = (tide["time"] + timedelta(hours=1)).isoformat()
 
-    event_id = f"lowtide-{tide['date']}".replace("-", "")
+    event_id = f"lowtide-{tide['date'].strftime('%Y%m%d')}"
 
     title = f"🌊 Low tide {tide['value']} m at {local_time.strftime('%H:%M')}"
 
