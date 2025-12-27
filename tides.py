@@ -17,7 +17,7 @@ TIME_SERIES_CODE = "wlp"
 RESOLUTION = "SIXTY_MINUTES"
 THRESHOLD = 0.5  # meters
 
-CALENDAR_ID = "primary"
+CALENDAR_ID = "50479ca776433aa9a20dbdcd277896af1291ac8630e598f8ba7075640c5e512a@group.calendar.google.com"
 TIMEZONE = "America/Vancouver"
 
 DRY_RUN = False  # ← set to True to test without creating events
