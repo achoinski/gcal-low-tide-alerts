@@ -23,11 +23,11 @@ TIMEZONE = "America/Vancouver"
 DRY_RUN = False  # ← set to True to test without creating events
 
 # =======================
-# DATE RANGE (14 days)
+# DATE RANGE (4 weeks)
 # =======================
 
 start = datetime.now(timezone.utc)
-end = start + timedelta(days=14)
+end = start + timedelta(days=28)
 
 from_str = start.strftime("%Y-%m-%dT%H:%M:%SZ")
 to_str = end.strftime("%Y-%m-%dT%H:%M:%SZ")
