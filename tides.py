@@ -5,9 +5,6 @@ from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 from collections import defaultdict
 
-from google.oauth2 import service_account
-from googleapiclient.discovery import build
-
 # =======================
 # CONFIGURATION
 # =======================
@@ -84,11 +81,15 @@ if not daily_low_tides:
 # =======================
 
 if not DRY_RUN:
+    from google.oauth2 import service_account
+    from googleapiclient.discovery import build
+
     creds = service_account.Credentials.from_service_account_info(
         json.loads(os.environ["GOOGLE_CREDENTIALS"]),
         scopes=["https://www.googleapis.com/auth/calendar"],
     )
     service = build("calendar", "v3", credentials=creds)
+
 
 # =======================
 # CREATE CALENDAR EVENTS
