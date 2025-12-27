@@ -109,7 +109,6 @@ for tide in daily_low_tides:
     title = f"🌊 Low tide {tide['value']} m at {local_time.strftime('%H:%M')}"
 
     event = {
-        "id": event_id,
         "summary": title,
         "description": (
             f"Lowest predicted tide of the day\n"
