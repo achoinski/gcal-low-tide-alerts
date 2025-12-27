@@ -22,3 +22,6 @@ jobs:
 
       - name: Run script
         run: python tides.py
+        env: 
+          GOOGLE_CREDENTIALS: ${{ secrets.GOOGLE_CREDENTIALS }}
+
