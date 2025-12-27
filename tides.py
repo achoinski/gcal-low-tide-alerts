@@ -83,6 +83,8 @@ if not daily_low_tides:
 if not DRY_RUN:
     from google.oauth2 import service_account
     from googleapiclient.discovery import build
+    from googleapiclient.errors import HttpError
+
 
     creds = service_account.Credentials.from_service_account_info(
         json.loads(os.environ["GOOGLE_CREDENTIALS"]),
@@ -124,9 +126,16 @@ for tide in daily_low_tides:
     else:
         try:
             service.events().insert(
-                calendarId=CALENDAR_ID,
-                body=event,
+            calendarId=CALENDAR_ID,
+            body=event,
             ).execute()
             print(f"Created event: {title}")
-        except Exception as e:
-            print(f"Skipped {tide['date']} (likely duplicate)")
+
+        except HttpError as e:
+            if e.resp.status == 409:
+                print(f"Skipped {tide['date']} (already exists)")
+            else:
+                print("Google Calendar error:")
+                print(e)
+                raise
+
