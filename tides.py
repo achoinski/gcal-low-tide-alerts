@@ -47,6 +47,7 @@ low_tides = [e for e in events if e["value"] < THRESHOLD]
 # -----------------------
 # 6. Print results
 # -----------------------
+print("NEW VERSION WORKING")
 if not low_tides:
     print(f"No low tides below {THRESHOLD}m in the next 14 days.")
 else:
