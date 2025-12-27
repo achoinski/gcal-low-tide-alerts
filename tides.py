@@ -119,7 +119,7 @@ for tide in daily_low_tides:
 
     event = {
         "id": event_id,  # safe deterministic ID
-        "summary": f"🌊 Low tide {tide['value']} m",
+        "summary": f"Low tide {tide['value']} m",
         "description": f"Lowest predicted tide of the day\nHeight: {tide['value']} m\nTime (UTC): {tide['time'].strftime('%H:%M')}",
         "start": {"dateTime": tide['time'].isoformat(), "timeZone": "UTC"},
         "end": {"dateTime": (tide['time'] + timedelta(hours=1)).isoformat(), "timeZone": "UTC"},
