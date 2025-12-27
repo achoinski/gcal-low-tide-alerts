@@ -116,6 +116,9 @@ for tide in daily_low_tides:
     title = f"🌊 Low tide {tide['value']} m at {local_time.strftime('%H:%M')}"
 
     event_id = re.sub(r"[^a-z0-9-_\.]", "", f"lowtide-{tide['time'].strftime('%Y%m%d')}".lower())
+   
+    print(f"DEBUG event_id: {event_id!r}")
+    print(f"DEBUG start: {start_time}, end: {end_time}")
 
     event = {
         "id": event_id,  # safe deterministic ID
