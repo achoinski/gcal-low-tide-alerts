@@ -4,6 +4,8 @@ import requests
 from datetime import datetime, timedelta, timezone
 from urllib.parse import urlencode
 from collections import defaultdict
+from datetime import datetime
+
 
 # =======================
 # CONFIGURATION
@@ -46,6 +48,10 @@ url = f"{BASE_URL}?{urlencode(params)}"
 response = requests.get(url)
 response.raise_for_status()
 events = response.json()
+
+for tide in events:
+    # Convert the eventDate string to a datetime object (UTC)
+    tide['time'] = datetime.fromisoformat(tide['eventDate'].replace("Z", "+00:00"))
 
 # =======================
 # GROUP BY DATE
