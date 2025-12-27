@@ -110,13 +110,14 @@ from googleapiclient.errors import HttpError
 existing_events = set()
 if not DRY_RUN:
     for tide in daily_low_tides:
-        day_start = tide['time'].replace(hour=0, minute=0, second=0, microsecond=0)
+        # start and end of the day in UTC
+        day_start = tide['time'].replace(hour=0, minute=0, second=0, microsecond=0).astimezone(timezone.utc)
         day_end = day_start + timedelta(days=1)
 
         events_result = service.events().list(
             calendarId=CALENDAR_ID,
-            timeMin=day_start.isoformat() + 'Z',
-            timeMax=day_end.isoformat() + 'Z',
+            timeMin=day_start.isoformat(),
+            timeMax=day_end.isoformat(),
             singleEvents=True
         ).execute()
 
@@ -130,7 +131,7 @@ for tide in daily_low_tides:
         continue
 
     local_time = tide["time"].astimezone(
-        timezone(timedelta(hours=-8))  # PST/PDT
+        timezone(timedelta(hours=-8))  # PST/PDT for display
     )
 
     start_time = tide["time"].isoformat()
