@@ -101,23 +101,48 @@ if not DRY_RUN:
 
 
 # =======================
-# CREATE CALENDAR EVENTS
+# CREATE CALENDAR EVENTS (with duplicate checking)
 # =======================
 
+from googleapiclient.errors import HttpError
+
+# Build a set of dates that already have events
+existing_events = set()
+if not DRY_RUN:
+    for tide in daily_low_tides:
+        day_start = tide['time'].replace(hour=0, minute=0, second=0, microsecond=0)
+        day_end = day_start + timedelta(days=1)
+
+        events_result = service.events().list(
+            calendarId=CALENDAR_ID,
+            timeMin=day_start.isoformat() + 'Z',
+            timeMax=day_end.isoformat() + 'Z',
+            singleEvents=True
+        ).execute()
+
+        for e in events_result.get('items', []):
+            existing_events.add(day_start.date())
+
+# Loop through daily low tides and insert events if not already present
 for tide in daily_low_tides:
-    # Convert to local time for display
+    if tide['date'] in existing_events:
+        print(f"Skipped {tide['date']} (already exists)")
+        continue
+
     local_time = tide["time"].astimezone(
-        timezone(timedelta(hours=-8))  # PST/PDT; adjust if needed
+        timezone(timedelta(hours=-8))  # PST/PDT
     )
 
     start_time = tide["time"].isoformat()
     end_time = (tide["time"] + timedelta(hours=1)).isoformat()
 
-    # Title and description
     title = f"Low tide {tide['value']} m at {local_time.strftime('%H:%M')}"
-    description = f"Lowest predicted tide of the day\nHeight: {tide['value']} m\nTime (UTC): {tide['time'].strftime('%H:%M')}"
+    description = (
+        f"Lowest predicted tide of the day\n"
+        f"Height: {tide['value']} m\n"
+        f"Time (UTC): {tide['time'].strftime('%H:%M')}"
+    )
 
-    # Create the event dictionary (remove 'id' so Google auto-generates)
     event = {
         "summary": title,
         "description": description,
@@ -134,12 +159,7 @@ for tide in daily_low_tides:
                 body=event,
             ).execute()
             print(f"Created event: {title}")
-
         except HttpError as e:
-            if e.resp.status == 409:
-                # Event already exists (rare since no ID is specified)
-                print(f"Skipped {tide['date']} (already exists)")
-            else:
-                print("Google Calendar error:")
-                print(e)
-                raise
+            print("Google Calendar error:")
+            print(e)
+            raise
