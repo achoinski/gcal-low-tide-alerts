@@ -17,7 +17,7 @@ THRESHOLD = 0.5  # meters
 CALENDAR_ID = "primary"
 TIMEZONE = "America/Vancouver"
 
-DRY_RUN = True  # ← set to True to test without creating events
+DRY_RUN = False  # ← set to True to test without creating events
 
 # =======================
 # DATE RANGE (14 days)
