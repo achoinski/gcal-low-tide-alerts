@@ -131,7 +131,7 @@ for tide in daily_low_tides:
         continue
 
     local_time = tide["time"].astimezone(
-        timezone(timedelta(hours=-8))  # PST/PDT for display
+        timezone(timedelta(hours=-7))  # PST/PDT for display
     )
 
     start_time = tide["time"].isoformat()
